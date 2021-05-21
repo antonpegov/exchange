@@ -1,8 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
-import { SnackbarProvider } from 'notistack'
 import { ConnectedRouter } from 'connected-react-router'
+import { SnackbarProvider } from 'notistack'
 
 import { store, history } from 'store'
 import App from 'App'

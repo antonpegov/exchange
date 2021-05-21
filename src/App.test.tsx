@@ -1,9 +1,21 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { ConnectedRouter } from 'connected-react-router';
+import { Provider } from 'react-redux';
+import { render } from '@testing-library/react';
+
+import { store, history } from 'store'
+
 import App from './App';
 
-test('renders learn react link', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
-});
+describe('App Component', () => {
+  it('renders Wallet component', () => {
+    const { getByTestId } = render(
+      <Provider store={store}>
+        <ConnectedRouter history={history}>
+          <App />
+        </ConnectedRouter>
+      </Provider>
+    );
+    
+    expect(getByTestId('Wallet')).toBeInTheDocument()
+  })
+})

@@ -1,28 +1,30 @@
 import { ActionType, createReducer } from 'typesafe-actions'
 
 import { walletActions as actions } from 'state/actions/wallet.actions'
-import { Currencies } from 'state/models/currencies'
+import { Currency } from 'state/models/currencies'
 
 export type WalletState = {
-  balances: Record<Currencies, number>
+  balances: Record<Currency, number>,
+  currencies: Currency[],
 }
 
-const initialBalances: Record<Currencies, number>= {
-  [Currencies.USD]: 100,
-  [Currencies.EUR]: 200,
-  [Currencies.GBP]: 300,
-  [Currencies.PLN]: 400,
+export const initialBalances: Record<Currency, number>= {
+  [Currency.USD]: 100,
+  [Currency.EUR]: 200,
+  [Currency.GBP]: 300,
+  [Currency.PLN]: 400,
 
 }
 
 export const initialwalletState: WalletState = {
   balances: initialBalances,
+  currencies: [Currency.USD, Currency.EUR, Currency.GBP, Currency.PLN],
 }
 
 export const walletReducer = createReducer<WalletState, ActionType<typeof actions>>(
   initialwalletState
 )
-  .handleAction(actions.resetAccounts, (state) => ({
+  .handleAction(actions.resetBalances, (state) => ({
     ...state,
     balances: initialBalances
   }))

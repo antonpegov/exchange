@@ -1,26 +1,25 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import styled from 'styled-components';
+import { Route } from 'react-router-dom'
 
-function App() {
+import { Exchange, Wallet } from 'containers';
+
+import { Container, Panel } from 'shared/components';
+
+function App({className}: {className?: string}) {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className={className}>
+      <Container>
+        <Panel>
+          <Route exact path="/" component={Wallet} />
+          
+          <Route exact path="/exchange" component={Exchange} />
+        </Panel>
+      </Container>
     </div>
   );
 }
 
-export default App;
+export default styled(App)`
+  background-color: aliceblue;
+  height: 100vh;
+`;

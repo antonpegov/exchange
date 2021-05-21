@@ -4,7 +4,7 @@ import { ActionType, isActionOf } from 'typesafe-actions'
 import { filter, tap, ignoreElements } from 'rxjs/operators'
 
 import { exchangeActions } from 'state/actions/exchange.actions'
-import toast from 'state/helpers/toast.helper'
+import toast from 'utils/toast.helper'
 
 type Actions = ActionType<typeof exchangeActions>
 

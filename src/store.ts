@@ -8,11 +8,13 @@ import { walletReducer } from 'state/reducers/wallet.reducer'
 import { exchangeEpics } from 'state/epics/exchange.epics'
 import { walletEpics } from 'state/epics/wallet.epics'
 
-declare global {
+declare global {  
   interface Window {
     __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: <R>(a: R) => R
   }
 }
+
+export type RootState = NonNullable<Parameters<typeof rootReducer>[0]>
 
 const epicMiddleware = createEpicMiddleware()
 
@@ -27,8 +29,8 @@ export const rootEpic = combineEpics(
 
 export const rootReducer = (history: any) => combineReducers({
   router: connectRouter(history),
-  walletReducer,
-  exchangeReducer,
+  wallet: walletReducer,
+  exchange: exchangeReducer,
 })
 
 export const store = createStore(
