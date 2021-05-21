@@ -3,7 +3,7 @@ import { push } from 'connected-react-router'
 import { fireEvent, render } from '@testing-library/react'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { mockedState } from 'state/helpers/mocked-state'
+import { mockedState } from 'utils/mocks/mocked-state'
 
 import { Wallet, componentId, WalletProps, componentTitle } from './Wallet.component'
 

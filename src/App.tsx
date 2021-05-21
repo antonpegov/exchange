@@ -11,8 +11,8 @@ function App({className}: {className?: string}) {
       <Container>
         <Panel>
           <Route exact path="/" component={Wallet} />
-          
-          <Route exact path="/exchange" component={Exchange} />
+
+          <Route exact path="/ex" component={Exchange} />
         </Panel>
       </Container>
     </div>
