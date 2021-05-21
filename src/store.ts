@@ -1,5 +1,5 @@
-import { connectRouter } from 'connected-react-router'
-import { createBrowserHistory} from 'history'
+import { createBrowserHistory, History } from 'history'
+import { connectRouter, routerMiddleware } from 'connected-react-router'
 import { combineEpics, createEpicMiddleware } from 'redux-observable'
 import { combineReducers, compose, createStore, applyMiddleware } from 'redux'
 
@@ -14,7 +14,7 @@ declare global {
   }
 }
 
-export type RootState = NonNullable<Parameters<typeof rootReducer>[0]>
+export type RootState = NonNullable<Parameters<ReturnType<typeof makeRootReducer>>[0]>
 
 const epicMiddleware = createEpicMiddleware()
 
@@ -27,16 +27,16 @@ export const rootEpic = combineEpics(
   walletEpics,
 )
 
-export const rootReducer = (history: any) => combineReducers({
+export const makeRootReducer = (history: History) => combineReducers({
   router: connectRouter(history),
   wallet: walletReducer,
   exchange: exchangeReducer,
 })
 
 export const store = createStore(
-  rootReducer(history),
+  makeRootReducer(history),
   composeEnhancers(
-   applyMiddleware(epicMiddleware)
+   applyMiddleware(epicMiddleware, routerMiddleware(history)),
   ),
 )
 

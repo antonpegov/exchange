@@ -1,12 +1,12 @@
-import { Observable } from 'rxjs'
+import { push } from 'connected-react-router'
+import { Observable, of } from 'rxjs'
 import { combineEpics, Epic } from 'redux-observable'
 import { ActionType, isActionOf } from 'typesafe-actions'
-import { filter, ignoreElements, map, switchMap, tap } from 'rxjs/operators'
+import { filter, ignoreElements, map, switchMap, switchMapTo, tap } from 'rxjs/operators'
 
 import { exchangeActions } from 'state/actions/exchange.actions'
 import { walletActions } from 'state/actions/wallet.actions'
 import { Api } from 'api'
-import { Currency } from 'state/models'
 // import toast from 'utils/toast.helper'
 
 
@@ -31,7 +31,16 @@ const onReset$: Epic = (
       )),
     )
 
+  const openExchange$: Epic = (
+    action$: Observable<Actions>,
+  ) =>
+    action$.pipe(
+      filter(isActionOf(walletActions.runExchange)),
+      switchMapTo(of(push('/currency'))),
+    )
+
 export const walletEpics: Epic = combineEpics(
   onReset$,
   getRates$,
+  openExchange$,
 )
