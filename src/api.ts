@@ -1,7 +1,8 @@
 import { of } from 'rxjs'
-import { map, tap } from 'rxjs/operators'
+import { map } from 'rxjs/operators'
 
 import { Currency, ExchangeRates } from 'state/models'
+
 import { getHTTPData, http, RequestConfig, mockedRates } from 'utils'
 
 const useApiMock = false

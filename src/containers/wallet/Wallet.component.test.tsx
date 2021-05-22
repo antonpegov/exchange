@@ -53,4 +53,11 @@ describe('Wallet component', () => {
 
     expect(dispatchSpy).toHaveBeenCalledTimes(1)
   })
+
+  it('dispatch event when clicked on Start Exchange button', () => {
+    const { getAllByTestId } = render(component)
+    fireEvent.click(getAllByTestId('ExchangeButton')[0])
+
+    expect(dispatchSpy).toHaveBeenCalledTimes(1)
+  })
 });

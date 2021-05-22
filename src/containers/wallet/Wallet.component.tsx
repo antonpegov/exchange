@@ -1,30 +1,28 @@
-import React, { useEffect } from 'react'
+//#region Imports
+import React from 'react'
 import styled from 'styled-components'
 import { Button } from '@material-ui/core'
-import { useSnackbar } from 'notistack'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { getBalances, getCurrencies } from 'state/selectors'
 import { ButtonsWraper, Title } from 'shared/components'
 import { walletActions } from 'state/actions/wallet.actions'
-import { testIdBuilder } from 'utils/test-id-builder.helper'
 import { WalletRow } from 'components'
 
 export const componentId = 'Wallet'
 export const componentTitle = 'Balances'
-
+//#endregion
 //#region Styles
 const Balances = styled.div`
   display: flex;
   flex-direction: column;
+  margin-bottom: -30px;
 `
 
 const FullWidthButton = styled(Button)`
   width: 100%;
 `
 //#endregion
-
-const test = testIdBuilder(componentId);
 
 export type WalletProps = { }
 

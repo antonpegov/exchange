@@ -16,7 +16,7 @@ const ExchangeButton = styled(IconButton)`
 `
 const Wrapper = styled.div` 
   font-size: 20px;
-  margin: 0 20px;
+  margin: 0 10px;
 `
 //#endregion
 
@@ -34,13 +34,13 @@ export const WalletRow: React.FC<WalletRowProps> = ({
 
   return (
     <Wrapper data-testid={componentId}>
-      <i data-testid="Balance">{balance}</i> 
-      {' '}
-      <b data-testid="Currency">{currency}</b>
-      
       <ExchangeButton  data-testid="ExchangeButton" onClick={onExchangeClick}>
         <SyncIcon />
       </ExchangeButton>
+
+      <span data-testid="Balance">
+        <b data-testid="Currency">{currency}</b> {balance}
+      </span>
     </Wrapper>
   )
 };
