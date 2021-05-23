@@ -1,4 +1,4 @@
-import { AmountUpdatePayload, Currency, ExchangeRates, CurrencyChangePayload } from 'state/models';
+import { AmountUpdatePayload, Currency, ExchangeRates, CurrencyChangePayload, RateAdjustment } from 'state/models';
 import { createAction } from "typesafe-actions";
 
 export const exchangeActions = {
@@ -14,4 +14,6 @@ export const exchangeActions = {
   
   updateBaseAmount: createAction('@exchange/updateBaseAmount')<AmountUpdatePayload>(),
   updateTargetAmount: createAction('@exchange/updateTargetAmount')<AmountUpdatePayload>(),
+
+  updateRates: createAction('@exchange/updateRates')<RateAdjustment>(),
 }

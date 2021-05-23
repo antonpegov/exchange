@@ -1,13 +1,14 @@
 import { ActionType, createReducer } from 'typesafe-actions'
 
+import { nextCurrency, updateAmountsOnInputChange, updateAmountsOnRatesChange } from 'state/helpers'
 import { walletActions, exchangeActions } from 'state/actions'
-import { Currency, ExchangeMode } from 'state/models'
-import { nextCurrency, updateAmounts } from 'state/helpers'
+import { Amount, Currency, ExchangeMode } from 'state/models'
 
 type Action = ActionType<typeof walletActions & typeof exchangeActions>
 
 export type ExchangeState = {
   active: boolean,
+  activeInput: Amount | null,
   baseAmount: string,
   baseCurrency: Currency,
   error: boolean,
@@ -21,6 +22,7 @@ export type ExchangeState = {
 
 export const initialExchangeState: ExchangeState = {
   active: false,
+  activeInput: null,
   baseAmount: '',
   baseCurrency: Currency.EUR,
   error: true,
@@ -35,6 +37,7 @@ export const initialExchangeState: ExchangeState = {
 export const exchangeReducer = createReducer<ExchangeState, Action>(
   initialExchangeState
 )
+//#region Exchange actions
   .handleAction(exchangeActions.init, (state, { payload }) => ({
     ...state,
     active: true,
@@ -47,28 +50,22 @@ export const exchangeReducer = createReducer<ExchangeState, Action>(
 
   .handleAction(exchangeActions.rates, (state, { payload }) => ({
     ...state,
-    rates: payload.rates,
-    baseCurrency: payload.base,
+    ...updateAmountsOnRatesChange(state, payload),
   }))
 
   .handleAction(exchangeActions.updateBaseAmount, (state, { payload }) => ({
     ...state,
-    ...updateAmounts(state, payload, true),
+    ...updateAmountsOnInputChange(state, payload, Amount.BASE),
   }))
 
   .handleAction(exchangeActions.updateTargetAmount, (state, { payload }) => ({
     ...state,
-    ...updateAmounts(state, payload, false),
-  }))
-  
-  .handleAction(walletActions.updateBalances, (state) => ({
-    ...state,
-    baseAmount: '',
-    targetAmount: '',
+    ...updateAmountsOnInputChange(state, payload, Amount.TARGET),
   }))
 
   .handleAction(exchangeActions.changeMode, (state) => ({
     ...state,
+    activeInput: null,
     baseAmount: '',
     error: true,
     errorText: '',
@@ -78,11 +75,14 @@ export const exchangeReducer = createReducer<ExchangeState, Action>(
 
   .handleAction(exchangeActions.makeExchange, (state) => ({
     ...state,
+    activeInput: null,
     error: true,
+    errorText: '',
   }))
 
   .handleAction(exchangeActions.changeBaseCurrency, (state, { payload }) => ({
     ...state,
+    activeInput: null,
     baseCurrency: payload.selected,
     targetCurrency: payload.selected === state.targetCurrency 
       ? nextCurrency(payload.selected, payload.currencies) || payload.currencies[0]
@@ -96,6 +96,7 @@ export const exchangeReducer = createReducer<ExchangeState, Action>(
 
   .handleAction(exchangeActions.changeTargetCurrency, (state, { payload }) => ({
     ...state,
+    activeInput: null,
     baseCurrency: payload.selected === state.baseCurrency 
       ? nextCurrency(payload.selected, payload.currencies) || payload.currencies[0] 
       : state.baseCurrency,
@@ -106,3 +107,11 @@ export const exchangeReducer = createReducer<ExchangeState, Action>(
     errorText: '',
     targetAmount: '',
   }))
+//#endregion
+//#region Wallet actions  
+  .handleAction(walletActions.updateBalances, (state) => ({
+    ...state,
+    baseAmount: '',
+    targetAmount: '',
+  }))
+//#endregion

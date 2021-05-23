@@ -1,7 +1,7 @@
 {
-  "name": "my-app",
-  "version": "0.1.0",
-  "private": true,
+  "name": "cool_currency_exchange",
+  "version": "1.0.0",
+  "private": false,
   "homepage": "http://antonpegov.github.io/exchange/",
   "scripts": {
     "start": "react-scripts start",

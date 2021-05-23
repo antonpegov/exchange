@@ -33,8 +33,6 @@ export const theme = createMuiTheme({
         },
       },
       containedPrimary: {
-        // backgroundColor: 'linear-gradient(90deg, rgba(132,198,255,1) 10%,
-        // rgba(38,153,251,1) 100%)',
         backgroundColor: COLOR_BLUE_PRIMARY,
         color: WHITE,
         '&:hover': {
@@ -48,12 +46,6 @@ export const theme = createMuiTheme({
         display: 'flex',
         marginBottom: '10px',
       }
-    },
-
-    MuiDialog: {
-      root: {
-        minWidth: '350px',
-      },
     },
 
     MuiFab: {
