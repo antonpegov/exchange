@@ -9,7 +9,7 @@ const useApiMock = false
 
 export const Api = {
   getRates(baseCurrency: Currency) {
-    const url = 'http://data.fixer.io/api/latest?access_key=4e8faff8b19cdd9877d40145e04b7148'
+    const url = 'https://data.fixer.io/api/latest?access_key=4e8faff8b19cdd9877d40145e04b7148'
     const config: RequestConfig = {
       params: {
         symbols: 'USD,PLN,GBP,EUR',
