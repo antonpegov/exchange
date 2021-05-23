@@ -2,7 +2,7 @@ import { ActionType, createReducer } from 'typesafe-actions'
 
 import { walletActions, exchangeActions } from 'state/actions'
 import { Currency, ExchangeMode } from 'state/models'
-import { nextCurrency, toFixed } from 'state/helpers'
+import { nextCurrency, updateAmounts } from 'state/helpers'
 
 type Action = ActionType<typeof walletActions & typeof exchangeActions>
 
@@ -10,7 +10,7 @@ export type ExchangeState = {
   active: boolean,
   baseAmount: string,
   baseCurrency: Currency,
-  isLowBalance: boolean,
+  error: boolean,
   errorText: string,
   mode: ExchangeMode,
   rates: Record<Currency, number>,
@@ -23,7 +23,7 @@ export const initialExchangeState: ExchangeState = {
   active: false,
   baseAmount: '',
   baseCurrency: Currency.EUR,
-  isLowBalance: true,
+  error: true,
   errorText: '',
   mode: ExchangeMode.SELL,
   rates: {} as Record<Currency, number>,
@@ -53,18 +53,12 @@ export const exchangeReducer = createReducer<ExchangeState, Action>(
 
   .handleAction(exchangeActions.updateBaseAmount, (state, { payload }) => ({
     ...state,
-    baseAmount: payload.value,
-    targetAmount: isNaN(+payload.value) ? state.targetAmount : toFixed(+payload.value * state.rates[state.targetCurrency]),
-    isLowBalance: isNaN(+payload.value) || +payload.value > payload.balance,
-    errorText: isNaN(+payload.value) ? '' : 'Insufficient balance',
+    ...updateAmounts(state, payload, true),
   }))
 
   .handleAction(exchangeActions.updateTargetAmount, (state, { payload }) => ({
     ...state,
-    baseAmount: isNaN(+payload.value) ? state.baseAmount : toFixed(+payload.value / state.rates[state.targetCurrency]),
-    targetAmount: payload.value,
-    isLowBalance: isNaN(+payload.value) || +payload.value > payload.balance,
-    errorText: isNaN(+payload.value) ? '' : 'Insufficient balance',
+    ...updateAmounts(state, payload, false),
   }))
   
   .handleAction(walletActions.updateBalances, (state) => ({
@@ -78,4 +72,10 @@ export const exchangeReducer = createReducer<ExchangeState, Action>(
     mode: state.mode === ExchangeMode.BUY ? ExchangeMode.SELL : ExchangeMode.BUY,
     baseAmount: '',
     targetAmount: '',
+    error: true,
+  }))
+
+  .handleAction(exchangeActions.makeExchange, (state) => ({
+    ...state,
+    error: true
   }))

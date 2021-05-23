@@ -8,12 +8,10 @@ import { theme } from 'theme'
 import 'index.css'
 
 ReactDOM.render(
-  <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      <SnackbarProvider maxSnack={5} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
-        <App />
-      </SnackbarProvider>
-    </ThemeProvider>
-  </React.StrictMode>,
+  <ThemeProvider theme={theme}>
+    <SnackbarProvider maxSnack={5} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
+      <App />
+    </SnackbarProvider>
+  </ThemeProvider>,
   document.getElementById('root')
 );

@@ -43,6 +43,13 @@ export const theme = createMuiTheme({
       },
     },
 
+    MuiTextField: {
+      root: {
+        display: 'flex',
+        marginBottom: '10px',
+      }
+    },
+
     MuiDialog: {
       root: {
         minWidth: '350px',
@@ -51,8 +58,12 @@ export const theme = createMuiTheme({
 
     MuiFab: {
       root: {
-        width: '40px',
+        backgroundColor: 'aliceblue',
+        color: 'lightcoral',
         height: '40px',
+        position: 'absolute',
+        width: '40px',
+        zIndex: 100,
       }
     },
 

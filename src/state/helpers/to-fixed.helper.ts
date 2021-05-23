@@ -1,4 +1,4 @@
-export const toFixed = (value: number | string) => {
+export const toFixed = (value: number | string): number => {
   
-  return (Math.round(+value * 100)/100).toFixed(2) 
+  return (Math.round(+value * 100)/100)
 }

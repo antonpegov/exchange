@@ -3,14 +3,14 @@
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { useEffect, useState } from 'react'
-import { Button, Fab, IconButton, InputAdornment, TextField } from '@material-ui/core'
-import { ArrowUpwardRounded, ArrowDownwardRounded, ExpandMore } from '@material-ui/icons'
+import { Button, Fab, MenuItem, TextField } from '@material-ui/core'
+import { ArrowUpwardRounded, ArrowDownwardRounded } from '@material-ui/icons'
 
 import { ButtonsWraper, Title } from 'shared/components'
 
-import { getBalances, getBaseAmount, getBaseCurrency, getErrorText, getIsLowBalance, getMode, getRate, getTargetAmount, getTargetCurrency } from 'state/selectors'
+import { getBalances, getBaseAmount, getBaseCurrency, getErrorText, geterror, getMode, getRate, getTargetAmount, getTargetCurrency, getTargets } from 'state/selectors'
+import { Currency, ExchangeMode } from 'state/models'
 import { exchangeActions } from 'state/actions/exchange.actions'
-import { ExchangeMode } from 'state/models'
 
 export const componentId = 'Exchange'
 //#endregion
@@ -18,16 +18,14 @@ export const componentId = 'Exchange'
 const Wrapper = styled.form`
   position: relative;
 `
-
 const Rate = styled.div`
   color: lightcoral;
   display: flex;
   font-weight: 600;
   justify-content: center;
 `
-const Amount = styled(TextField)`
-  display: flex !important;
-  margin-bottom: 10px !important;
+const Amount = styled.div`
+  display: flex;
 `
 const Balance = styled.div`
   color: lightcoral;
@@ -49,14 +47,8 @@ const Error = styled.div<{visible: boolean}>`
   width: 100%;
 `
 const Direction = styled(Fab)`
-  background-color: aliceblue !important;
-  color: lightcoral !important;
-  position: absolute !important;
-  height: 40px;
-  width: 40px;
-  top: 130px;
+  top: 137px;
   left: 175px;
-  z-index: 100;
 `
 //#endregion
 
@@ -69,9 +61,10 @@ export const Exchange: React.FC<ExchangeProps> = () => {
   const baseAmount = useSelector(getBaseAmount)
   const baseCurrency = useSelector(getBaseCurrency)
   const errorText = useSelector(getErrorText)
-  const isLowBalance = useSelector(getIsLowBalance)
+  const error = useSelector(geterror)
   const mode = useSelector(getMode)
   const rate = useSelector(getRate)
+  const targets = useSelector(getTargets)
   const targetAmount = useSelector(getTargetAmount)
   const targetCurrency = useSelector(getTargetCurrency)
 
@@ -83,22 +76,27 @@ export const Exchange: React.FC<ExchangeProps> = () => {
     setSubmitButtonLabel(`${mode} ${baseCurrency} ${word} ${targetCurrency}`)
   }, [mode, baseCurrency, targetCurrency])
 
-  const handleBaseCurrensyChange = () => { console.log('boom') }
-  const handleTargetCurrensyChange  = () => { console.log('badaboom') }
-
-  const handleBaseAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (/^\d+(\.([0-9]([0-9])?)?)?$/.test(event.target.value)) {
+  const handleBaseCurrensyChange = (event: React.ChangeEvent<HTMLInputElement>): void => { 
+    dispatch(exchangeActions.changeBaseCurrency(event.target.value as Currency))
+  }
+  const handleTargetCurrensyChange  = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    dispatch(exchangeActions.changeTargetCurrency(event.target.value as Currency))
+  }
+  const handleBaseAmountChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    if (!event.target.value || /^\d+(\.([0-9]([0-9])?)?)?$/.test(event.target.value)) {
       dispatch(exchangeActions.updateBaseAmount({
         value: event.target.value, 
-        balance: balances[baseCurrency],
+        baseBalance: balances[baseCurrency],
+        targetBalance: balances[targetCurrency],
       }))
     }
   }
-  const handleTargetAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (/^\d+(\.([0-9]([0-9])?)?)?$/.test(event.target.value)) {
+  const handleTargetAmountChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    if (!event.target.value || /^\d+(\.([0-9]([0-9])?)?)?$/.test(event.target.value)) {
       dispatch(exchangeActions.updateTargetAmount({
         value: event.target.value, 
-        balance: balances[targetCurrency],
+        baseBalance: balances[baseCurrency],
+        targetBalance: balances[targetCurrency],
       }))
     }
   }
@@ -109,24 +107,30 @@ export const Exchange: React.FC<ExchangeProps> = () => {
 
       <Rate data-testid="Rate"> 1 {baseCurrency} = {rate} {targetCurrency}</Rate>
 
-      <Amount
-        data-testid="baseAmount"
-        id="baseAmount"
-        label={baseCurrency}
-        value={baseAmount}
-        onChange={handleBaseAmountChange}
-        InputProps={{
-          endAdornment:
-            <InputAdornment position="end" title="Change base currency" style={{'position': 'relative', 'left': '10px',}}>
-              <IconButton
-                aria-label="toggle password visibility"
-                onClick={handleBaseCurrensyChange}
-              >
-                <ExpandMore />
-              </IconButton>
-            </InputAdornment>
-        }}
-      />
+      <Amount>
+        <TextField
+          data-testid="baseAmount"
+          id="baseAmount"
+          label={baseCurrency}
+          style={{flexGrow: 1}}
+          value={baseAmount}
+          onChange={handleBaseAmountChange}
+        />
+
+        <TextField
+          id="standard-select-currency"
+          select
+          style={{width: '25px', justifyContent: 'flex-end'}}
+          value={''}
+          onChange={handleBaseCurrensyChange}
+        >
+          {targets.map((option, index) => (
+            <MenuItem key={index} value={option}>
+              {option}
+            </MenuItem>
+          ))}
+        </TextField>
+      </Amount>
 
       <Balance>Balance: {balances[baseCurrency]} {baseCurrency}</Balance>
 
@@ -137,29 +141,34 @@ export const Exchange: React.FC<ExchangeProps> = () => {
         }
       </Direction>
 
-      <Amount
-        data-testid="targetAmount"
-        id="targetAmount"
-        label={targetCurrency}
-        value={targetAmount}
-        style={{marginTop: '15px'}}
-        onChange={handleTargetAmountChange}
-        InputProps={{
-          endAdornment:
-            <InputAdornment position="end" title="Change target currency" style={{'position': 'relative', 'left': '10px',}}>
-              <IconButton
-                aria-label="toggle password visibility"
-                onClick={handleTargetCurrensyChange}
-              >
-                <ExpandMore />
-              </IconButton>
-            </InputAdornment>
-        }}
-      />
+      <Amount>
+        <TextField
+          data-testid="targetAmount"
+          id="targetAmount"
+          label={targetCurrency}
+          value={targetAmount}
+          style={{flexGrow: 1, marginTop: '15px'}}
+          onChange={handleTargetAmountChange}
+        />
+
+        <TextField
+          id="standard-select-currency"
+          select
+          style={{width: '25px', justifyContent: 'flex-end'}}
+          value={''}
+          onChange={handleTargetCurrensyChange}
+        >
+          {targets.filter((item => item !== targetCurrency)).map((option, index) => (
+            <MenuItem key={index} value={option}>
+              {option}
+            </MenuItem>
+          ))}
+        </TextField>
+      </Amount>
 
       <Balance>Balance: {balances[targetCurrency]} {targetCurrency}</Balance>
 
-      <Error visible={isLowBalance}>{errorText}</Error>
+      <Error visible={error}>{errorText}</Error>
 
       <ButtonsWraper>
         <Button
@@ -174,7 +183,7 @@ export const Exchange: React.FC<ExchangeProps> = () => {
         <Button
           color="primary"
           data-testid="SubmitButton"
-          disabled={isLowBalance}
+          disabled={error}
           onClick={() => dispatch(exchangeActions.makeExchange())}
           style={{'flexGrow': 1}}
           variant="contained"

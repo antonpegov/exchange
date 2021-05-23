@@ -12,6 +12,6 @@ export const getTargetAmount = createSelector(getExchangeState, (state) => state
 export const getTargetCurrency = createSelector(getExchangeState, (state) => state.targetCurrency)
 
 export const getRate = createSelector(getExchangeState, (state) => state.rates[state.targetCurrency])
-export const getIsLowBalance = createSelector(getExchangeState, (state) => state.isLowBalance)
+export const geterror = createSelector(getExchangeState, (state) => state.error)
 export const getErrorText = createSelector(getExchangeState, (state) => state.errorText)
-
+export const getTargets = createSelector(getExchangeState, (state) => state.targets)

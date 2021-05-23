@@ -1,4 +1,4 @@
-import { nextCurrency } from 'state/helpers/target-currency.helper';
+import { nextCurrency } from 'state/helpers/next-currency.helper';
 import { Currency } from 'state/models';
 
 const currencies: Currency[] = [
@@ -8,14 +8,14 @@ const currencies: Currency[] = [
 ]
 
 describe('Target currency select helper', () => {
-  it('returns first currency after base one', () => {
+  it('returns first currency in the array', () => {
 
-    expect(nextCurrency(Currency.EUR, currencies)).toBe(Currency.GBP)
+    expect(nextCurrency(Currency.EUR, currencies)).toBe(Currency.PLN)
   });
 
-  it('returns first currency in the array if last one is passed', () => {
+  it('returns first currency in the array ignoring passed one', () => {
 
-    expect(nextCurrency(Currency.GBP, currencies)).toBe(Currency.PLN)
+    expect(nextCurrency(Currency.PLN, currencies)).toBe(Currency.EUR)
   });
 
   it('trows Error if passed base currency is not present in the array', () => {

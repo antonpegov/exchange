@@ -1,4 +1,5 @@
 export type AmountUpdatePayload = {
   value: string
-  balance: number
+  baseBalance: number
+  targetBalance: number
 }

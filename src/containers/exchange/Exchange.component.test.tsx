@@ -140,7 +140,7 @@ describe('Exchange component', () => {
         ...mockedState,
         exchange: {
           ...mockedState.exchange,
-          isLowBalance: false,
+          error: false,
         }
       }))
 
