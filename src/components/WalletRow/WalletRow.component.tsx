@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { SyncAlt } from '@material-ui/icons'
 import { IconButton } from '@material-ui/core'
 
-import { Currency } from 'state/models/currencies'
+import { Currency } from 'state/models/currency'
 //#region Styles
 const ExchangeButton = styled(IconButton)`
   color: lightcoral !important;

@@ -1,4 +1,4 @@
-import { Currency } from 'state/models/currencies';
+import { Currency } from 'state/models/currency';
 
 export type ExchangeRates = {
   base: Currency,

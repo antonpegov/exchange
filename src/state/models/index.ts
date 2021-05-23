@@ -1,4 +1,5 @@
-export * from './currencies'
+export * from './currency'
 export * from './exchange-mode'
 export * from './exchange-rates'
 export * from './amount-update.payload'
+export * from './currency-change.payload'

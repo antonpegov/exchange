@@ -8,9 +8,9 @@ import { ArrowUpwardRounded, ArrowDownwardRounded } from '@material-ui/icons'
 
 import { ButtonsWraper, Title } from 'shared/components'
 
-import { getBalances, getBaseAmount, getBaseCurrency, getErrorText, geterror, getMode, getRate, getTargetAmount, getTargetCurrency, getTargets } from 'state/selectors'
+import { getBalances, getBaseAmount, getBaseCurrency, getErrorText, geterror, getMode, getRate, getTargetAmount, getTargetCurrency, getTargets, getCurrencies } from 'state/selectors'
 import { Currency, ExchangeMode } from 'state/models'
-import { exchangeActions } from 'state/actions/exchange.actions'
+import { exchangeActions } from 'state/actions'
 
 export const componentId = 'Exchange'
 //#endregion
@@ -23,6 +23,7 @@ const Rate = styled.div`
   display: flex;
   font-weight: 600;
   justify-content: center;
+  margin-top: -10px;
 `
 const Amount = styled.div`
   display: flex;
@@ -47,8 +48,14 @@ const Error = styled.div<{visible: boolean}>`
   width: 100%;
 `
 const Direction = styled(Fab)`
-  top: 137px;
+  top: 127px;
   left: 175px;
+`
+const Selector = styled(TextField)`
+  justify-content: flex-end;
+  overflow: hidden;
+  width: 25px;
+
 `
 //#endregion
 
@@ -60,6 +67,7 @@ export const Exchange: React.FC<ExchangeProps> = () => {
   const balances = useSelector(getBalances)
   const baseAmount = useSelector(getBaseAmount)
   const baseCurrency = useSelector(getBaseCurrency)
+  const currencies = useSelector(getCurrencies)
   const errorText = useSelector(getErrorText)
   const error = useSelector(geterror)
   const mode = useSelector(getMode)
@@ -77,10 +85,16 @@ export const Exchange: React.FC<ExchangeProps> = () => {
   }, [mode, baseCurrency, targetCurrency])
 
   const handleBaseCurrensyChange = (event: React.ChangeEvent<HTMLInputElement>): void => { 
-    dispatch(exchangeActions.changeBaseCurrency(event.target.value as Currency))
+    dispatch(exchangeActions.changeBaseCurrency({
+      selected: event.target.value as Currency,
+      currencies
+    }))
   }
   const handleTargetCurrensyChange  = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    dispatch(exchangeActions.changeTargetCurrency(event.target.value as Currency))
+    dispatch(exchangeActions.changeTargetCurrency({
+      selected: event.target.value as Currency,
+      currencies, 
+    }))
   }
   const handleBaseAmountChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     if (!event.target.value || /^\d+(\.([0-9]([0-9])?)?)?$/.test(event.target.value)) {
@@ -117,19 +131,18 @@ export const Exchange: React.FC<ExchangeProps> = () => {
           onChange={handleBaseAmountChange}
         />
 
-        <TextField
+        <Selector
           id="standard-select-currency"
           select
-          style={{width: '25px', justifyContent: 'flex-end'}}
           value={''}
           onChange={handleBaseCurrensyChange}
         >
-          {targets.map((option, index) => (
+          {targets.filter((item => item !== baseCurrency)).map((option, index) => (
             <MenuItem key={index} value={option}>
               {option}
             </MenuItem>
           ))}
-        </TextField>
+        </Selector>
       </Amount>
 
       <Balance>Balance: {balances[baseCurrency]} {baseCurrency}</Balance>
@@ -151,10 +164,9 @@ export const Exchange: React.FC<ExchangeProps> = () => {
           onChange={handleTargetAmountChange}
         />
 
-        <TextField
+        <Selector
           id="standard-select-currency"
           select
-          style={{width: '25px', justifyContent: 'flex-end'}}
           value={''}
           onChange={handleTargetCurrensyChange}
         >
@@ -163,7 +175,7 @@ export const Exchange: React.FC<ExchangeProps> = () => {
               {option}
             </MenuItem>
           ))}
-        </TextField>
+        </Selector>
       </Amount>
 
       <Balance>Balance: {balances[targetCurrency]} {targetCurrency}</Balance>

@@ -39,8 +39,8 @@ export const exchangeReducer = createReducer<ExchangeState, Action>(
     ...state,
     active: true,
     baseCurrency: payload.base,
-    targetCurrency: nextCurrency(payload.base, payload.currencies) || payload.base,
-    targets: payload.currencies.filter(item => item !== payload.base)
+    targetCurrency: nextCurrency(payload.base, payload.currencies) || payload.currencies[0],
+    targets: payload.currencies,
   }))
 
   .handleAction(exchangeActions.return, () => initialExchangeState)
@@ -69,13 +69,40 @@ export const exchangeReducer = createReducer<ExchangeState, Action>(
 
   .handleAction(exchangeActions.changeMode, (state) => ({
     ...state,
-    mode: state.mode === ExchangeMode.BUY ? ExchangeMode.SELL : ExchangeMode.BUY,
     baseAmount: '',
-    targetAmount: '',
     error: true,
+    errorText: '',
+    mode: state.mode === ExchangeMode.BUY ? ExchangeMode.SELL : ExchangeMode.BUY,
+    targetAmount: '',
   }))
 
   .handleAction(exchangeActions.makeExchange, (state) => ({
     ...state,
-    error: true
+    error: true,
+  }))
+
+  .handleAction(exchangeActions.changeBaseCurrency, (state, { payload }) => ({
+    ...state,
+    baseCurrency: payload.selected,
+    targetCurrency: payload.selected === state.targetCurrency 
+      ? nextCurrency(payload.selected, payload.currencies) || payload.currencies[0]
+      : state.targetCurrency,
+    targets: payload.currencies,
+    baseAmount: '',
+    error: true,
+    errorText: '',
+    targetAmount: '',
+  }))
+
+  .handleAction(exchangeActions.changeTargetCurrency, (state, { payload }) => ({
+    ...state,
+    baseCurrency: payload.selected === state.baseCurrency 
+      ? nextCurrency(payload.selected, payload.currencies) || payload.currencies[0] 
+      : state.baseCurrency,
+    targetCurrency: payload.selected,
+    targets: payload.currencies,
+    baseAmount: '',
+    error: true,
+    errorText: '',
+    targetAmount: '',
   }))
