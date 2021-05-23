@@ -6,6 +6,7 @@ export const exchangeActions = {
   rates: createAction('@exchange/rates')<ExchangeRates>(),
 
   return: createAction('@exchange/return')<void>(),
+  changeMode: createAction('@exchange/changeMode')<void>(),
   makeExchange: createAction('@exchange/makeExchange')<void>(),
 
   updateBaseAmount: createAction('@exchange/updateBaseAmount')<AmountUpdatePayload>(),

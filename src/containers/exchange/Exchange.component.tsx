@@ -1,10 +1,10 @@
 
 //#region Imports
 import styled from 'styled-components'
-import { ExpandMore } from '@material-ui/icons'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { useEffect, useState } from 'react'
-import { Button, IconButton, InputAdornment, TextField } from '@material-ui/core'
+import { Button, Fab, IconButton, InputAdornment, TextField } from '@material-ui/core'
+import { ArrowUpwardRounded, ArrowDownwardRounded, ExpandMore } from '@material-ui/icons'
 
 import { ButtonsWraper, Title } from 'shared/components'
 
@@ -48,6 +48,16 @@ const Error = styled.div<{visible: boolean}>`
   position: absolute;
   width: 100%;
 `
+const Direction = styled(Fab)`
+  background-color: aliceblue !important;
+  color: lightcoral !important;
+  position: absolute !important;
+  height: 40px;
+  width: 40px;
+  top: 130px;
+  left: 175px;
+  z-index: 100;
+`
 //#endregion
 
 export type ExchangeProps = { }
@@ -75,7 +85,7 @@ export const Exchange: React.FC<ExchangeProps> = () => {
 
   const handleBaseCurrensyChange = () => { console.log('boom') }
   const handleTargetCurrensyChange  = () => { console.log('badaboom') }
-  
+
   const handleBaseAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (/^\d+(\.([0-9]([0-9])?)?)?$/.test(event.target.value)) {
       dispatch(exchangeActions.updateBaseAmount({
@@ -92,7 +102,7 @@ export const Exchange: React.FC<ExchangeProps> = () => {
       }))
     }
   }
-
+  
   return (
     <Wrapper data-testid={componentId} autoComplete="off">
       <Title data-testid="Title"> {mode} {baseCurrency}</Title>
@@ -120,11 +130,19 @@ export const Exchange: React.FC<ExchangeProps> = () => {
 
       <Balance>Balance: {balances[baseCurrency]} {baseCurrency}</Balance>
 
+      <Direction onClick={() => dispatch(exchangeActions.changeMode())}>
+        {mode === ExchangeMode.SELL 
+          ? <ArrowDownwardRounded />
+          : <ArrowUpwardRounded />
+        }
+      </Direction>
+
       <Amount
         data-testid="targetAmount"
         id="targetAmount"
         label={targetCurrency}
         value={targetAmount}
+        style={{marginTop: '15px'}}
         onChange={handleTargetAmountChange}
         InputProps={{
           endAdornment:

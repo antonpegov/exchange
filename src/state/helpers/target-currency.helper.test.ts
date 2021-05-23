@@ -7,7 +7,7 @@ const currencies: Currency[] = [
   Currency.GBP
 ]
 
-fdescribe('Target currency select helper', () => {
+describe('Target currency select helper', () => {
   it('returns first currency after base one', () => {
 
     expect(nextCurrency(Currency.EUR, currencies)).toBe(Currency.GBP)

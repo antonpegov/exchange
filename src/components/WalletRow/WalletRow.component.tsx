@@ -1,13 +1,9 @@
-//#region Imports
 import React from 'react'
 import styled from 'styled-components'
-import SyncIcon from '@material-ui/icons/Sync'
+import { SyncAlt } from '@material-ui/icons'
 import { IconButton } from '@material-ui/core'
 
 import { Currency } from 'state/models/currencies'
-
-export const componentId = 'WalletRow'
-//#endregion
 //#region Styles
 const ExchangeButton = styled(IconButton)`
   color: lightcoral !important;
@@ -19,6 +15,7 @@ const Wrapper = styled.div`
   margin: 0 10px;
 `
 //#endregion
+export const componentId = 'WalletRow'
 
 export type WalletRowProps = { 
   balance: number,
@@ -35,7 +32,7 @@ export const WalletRow: React.FC<WalletRowProps> = ({
   return (
     <Wrapper data-testid={componentId}>
       <ExchangeButton  data-testid="ExchangeButton" onClick={onExchangeClick}>
-        <SyncIcon />
+        <SyncAlt />
       </ExchangeButton>
 
       <span data-testid="Balance">

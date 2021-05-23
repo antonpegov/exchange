@@ -72,3 +72,10 @@ export const exchangeReducer = createReducer<ExchangeState, Action>(
     baseAmount: '',
     targetAmount: '',
   }))
+
+  .handleAction(exchangeActions.changeMode, (state) => ({
+    ...state,
+    mode: state.mode === ExchangeMode.BUY ? ExchangeMode.SELL : ExchangeMode.BUY,
+    baseAmount: '',
+    targetAmount: '',
+  }))

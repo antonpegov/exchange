@@ -10,12 +10,12 @@ describe('Wallet reducer', () => {
       ...initialWalletState,
       balances: {
         ...initialWalletState.balances,
-        [Currency.EUR]: 200
+        [Currency.EUR]: 50
       }
     })
     
     const state = walletReducer(initialState, walletActions.resetBalances())
 
-    expect(state.balances.EUR).toBe(100)
+    expect(state.balances.EUR).toBe(200)
   })
 })

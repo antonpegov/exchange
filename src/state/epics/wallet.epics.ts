@@ -7,6 +7,7 @@ import { filter, map, mapTo, withLatestFrom } from 'rxjs/operators'
 import { exchangeActions, walletActions } from 'state/actions'
 import { ExchangeMode } from 'state/models'
 import { RootState } from 'store'
+import { toFixed } from 'state/helpers'
 
 type Actions = ActionType<typeof walletActions & typeof exchangeActions>
 
@@ -32,11 +33,11 @@ const makeExchange$: Epic = (
       let newBaseBalance, newTargetBalance  
       
       if (exchange.mode === ExchangeMode.BUY) {
-        newBaseBalance = balances[exchange.baseCurrency] + +exchange.baseAmount
-        newTargetBalance = balances[exchange.targetCurrency] - +exchange.targetAmount
+        newBaseBalance = toFixed(balances[exchange.baseCurrency] + +exchange.baseAmount)
+        newTargetBalance = toFixed(balances[exchange.targetCurrency] - +exchange.targetAmount)
       } else {
-        newBaseBalance = balances[exchange.baseCurrency] - +exchange.baseAmount
-        newTargetBalance = balances[exchange.targetCurrency] + +exchange.targetAmount
+        newBaseBalance = toFixed(balances[exchange.baseCurrency] - +exchange.baseAmount)
+        newTargetBalance = toFixed(balances[exchange.targetCurrency] + +exchange.targetAmount)
       }
 
       return walletActions.updateBalances({
