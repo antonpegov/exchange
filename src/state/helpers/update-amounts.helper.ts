@@ -9,17 +9,15 @@ export const updateAmountsOnInputChange = (
 ): Partial<ExchangeState> => {
   
   let activeInput: Amount | null = null
-  let error: boolean
+  let error = true
+  let errorText = ''
   let newBaseAmount: string
   let newTargetAmount: string
-  let errorText = ''
   
   if (value.match(/^\d+\.$/g)) {
-    error = true
     newBaseAmount = source === Amount.BASE ? value : baseAmount
     newTargetAmount = source === Amount.BASE ? targetAmount : value
   } else if (value === '') {
-    error = true
     newBaseAmount = ''
     newTargetAmount = ''
   } else {

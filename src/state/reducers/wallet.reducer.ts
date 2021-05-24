@@ -15,7 +15,6 @@ export const initialBalances: Record<Currency, number> = {
   [Currency.EUR]: 200,
   [Currency.GBP]: 300,
   [Currency.PLN]: 400,
-
 }
 
 export const initialWalletState: WalletState = {
