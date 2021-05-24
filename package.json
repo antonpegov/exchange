@@ -1,6 +1,7 @@
 {
-  "name": "cool_currency_exchange",
-  "version": "1.0.0",
+
+  "name": "cool_currency_exchange_widget",
+  "version": "1.0.1",
   "private": false,
   "homepage": "http://antonpegov.github.io/exchange/",
   "scripts": {

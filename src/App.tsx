@@ -7,9 +7,14 @@ import { Exchange, Wallet } from 'containers';
 import { Container, Panel } from 'shared/components';
 import { store, history } from 'store'
 
-function App({className}: {className?: string}) {
+const Background = styled.div`
+  background-color: aliceblue;
+  height: 100vh;
+`
+
+export const App = () => {
   return (
-    <div className={className}>
+    <Background>
       <Provider store={store}>
         <Container>
           <Panel>
@@ -27,11 +32,6 @@ function App({className}: {className?: string}) {
           </Panel>
         </Container>
       </Provider>
-    </div>
+    </Background>
   );
 }
-
-export default styled(App)`
-  background-color: aliceblue;
-  height: 100vh;
-`;
