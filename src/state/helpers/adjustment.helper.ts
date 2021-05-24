@@ -5,20 +5,24 @@ const adjust = (initial: number, percentages: number) =>
 
 export const adjustRates = (
   baseCurrency: Currency,
-  currencies: Currency[],
-  rates: Record<Currency, number>, 
+  currencies: Partial<Currency[]>,
+  rates: Partial<Record<Currency, number>>, 
   index: number,
-): Record<Currency, number> => {
-  currencies.forEach((currency) => {
-    if (currency !== baseCurrency) {
-      rates[currency] = adjust(
-        rates[currency],
-        index % 2 === 0 
-          ? 100 - +Math.random().toFixed(2)
-          : 100 + +Math.random().toFixed(2),
-      )
+): Partial<Record<Currency, number>> => {
+  for (const currency of currencies) {
+    if (!!currency && currency !== baseCurrency) {
+      const rate = rates[currency];
+
+      if (rate) {
+        rates[currency] = adjust(
+          rate,
+          index % 2 === 0 
+            ? 100 - +Math.random().toFixed(2)
+            : 100 + +Math.random().toFixed(2),
+        )
+      }
     }
-  })
-  
+  }
+
   return rates
 }
