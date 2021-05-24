@@ -15,12 +15,13 @@ export const initialBalances: Record<Currency, number> = {
   [Currency.EUR]: 200,
   [Currency.GBP]: 300,
   [Currency.PLN]: 400,
-
 }
+
+export const allCurrencies = [Currency.USD, Currency.EUR, Currency.GBP, Currency.PLN];
 
 export const initialWalletState: WalletState = {
   balances: initialBalances,
-  currencies: [Currency.USD, Currency.EUR, Currency.GBP, Currency.PLN],
+  currencies: allCurrencies,
 }
 
 export const walletReducer = createReducer<WalletState, Action>(
