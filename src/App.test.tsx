@@ -4,7 +4,7 @@ import { render } from '@testing-library/react';
 
 import { store, history } from 'store'
 
-import App from './App';
+import { App } from './App';
 
 describe('App Component', () => {
   it('renders Wallet component', () => {
